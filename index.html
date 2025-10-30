@@ -22,7 +22,7 @@
 
         * {
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent; /* Elimina el resaltado azul al tocar en iOS */
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -36,7 +36,7 @@
             color: var(--text-color);
             line-height: 1.6;
             min-height: 100vh;
-            -webkit-text-size-adjust: 100%; /* Previene el zoom automático en iOS */
+            -webkit-text-size-adjust: 100%;
         }
 
         .container {
@@ -54,20 +54,38 @@
             font-size: 1.8rem;
         }
 
-        #timer {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin: 10px;
-            text-align: center;
+        #rosco-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
         }
 
         #rosco {
             position: relative;
             width: 100%;
-            max-width: 400px;
             height: 0;
             padding-bottom: 100%;
-            margin: 0 auto;
+        }
+
+        #timer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            color: #333;
         }
 
         .letter-btn {
@@ -87,9 +105,10 @@
             justify-content: center;
             transition: var(--transition);
             font-size: 0.8rem;
-            -webkit-appearance: none; /* Elimina estilos nativos de iOS */
-            -webkit-touch-callout: none; /* Desactiva el menú al mantener presionado en iOS */
-            user-select: none; /* Evita la selección de texto */
+            -webkit-appearance: none;
+            -webkit-touch-callout: none;
+            user-select: none;
+            z-index: 5;
         }
 
         /* Estados específicos para los botones de letras */
@@ -157,7 +176,7 @@
             border-radius: 5px;
             border: 2px solid var(--primary-color);
             min-width: 0;
-            -webkit-appearance: none; /* Elimina estilos nativos de iOS */
+            -webkit-appearance: none;
         }
 
         #input-area button {
@@ -229,9 +248,11 @@
 <body>
     <div class="container">
         <h1>Rosco de Pasapalabra - Fitness</h1>
-        <div id="timer">Temps restant: 10:00</div>
         
-        <div id="rosco"></div>
+        <div id="rosco-container">
+            <div id="rosco"></div>
+            <div id="timer">Temps restant: 10:00</div>
+        </div>
         
         <div class="game-controls">
             <div id="definition">Definició apareixerà aquí...</div>
@@ -450,7 +471,7 @@
         function updateTimer() {
             const minutes = Math.floor(totalTime / 60);
             const seconds = totalTime % 60;
-            timerBox.textContent = `Temps restant: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+            timerBox.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
         }
 
         // Función para añadir mensaje al historial de feedback

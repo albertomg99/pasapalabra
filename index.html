@@ -39,7 +39,7 @@
 
         .container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 600px; /* Limitamos el ancho máximo para mantener diseño vertical */
             padding: 0 15px;
             display: flex;
             flex-direction: column;
@@ -59,25 +59,10 @@
             text-align: center;
         }
 
-        .game-area {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            width: 100%;
-            margin: 20px 0;
-        }
-
-        @media (min-width: 768px) {
-            .game-area {
-                grid-template-columns: 1fr 1fr;
-                align-items: start;
-            }
-        }
-
         #rosco {
             position: relative;
             width: 100%;
-            max-width: 500px;
+            max-width: 400px; /* Reducimos el tamaño máximo del rosco */
             height: 0;
             padding-bottom: 100%; /* Mantener relación de aspecto 1:1 */
             margin: 0 auto;
@@ -87,8 +72,8 @@
             position: absolute;
             width: 12%;
             height: 12%;
-            max-width: 50px;
-            max-height: 50px;
+            max-width: 45px;
+            max-height: 45px;
             border-radius: 50%;
             border: none;
             background-color: var(--primary-color);
@@ -104,7 +89,7 @@
 
         @media (min-width: 480px) {
             .letter-btn {
-                font-size: 1rem;
+                font-size: 0.9rem;
             }
         }
 
@@ -117,7 +102,6 @@
             display: flex;
             flex-direction: column;
             width: 100%;
-            max-width: 600px;
         }
 
         #definition,
@@ -227,25 +211,22 @@
 
 <body>
     <div class="container">
-        <div style="max-width: 600px;">
-            <h1>Rosco de Pasapalabra - Fitness</h1>
-            <div id="timer">Temps restant: 10:00</div>
-            
-            <div class="game-area">
-                <div id="rosco"></div>
-                <div class="game-controls">
-                    <div id="definition">Definició apareixerà aquí...</div>
-                    <div id="input-area">
-                        <input type="text" id="answer-input" placeholder="Escriu la teva resposta aquí">
-                        <button id="pasar" class="playing">Pasa Palabra</button>
-                    </div>
-                    <div id="controls">
-                        <button id="jugar">Jugar</button>
-                        <button id="pista" disabled>Pista</button>
-                    </div>
-                    <div id="feedback">Feedback apareixerà aquí...</div>
-                </div>
+        <h1>Rosco de Pasapalabra - Fitness</h1>
+        <div id="timer">Temps restant: 10:00</div>
+        
+        <div id="rosco"></div>
+        
+        <div class="game-controls">
+            <div id="definition">Definició apareixerà aquí...</div>
+            <div id="input-area">
+                <input type="text" id="answer-input" placeholder="Escriu la teva resposta aquí">
+                <button id="pasar" class="playing">Pasa Palabra</button>
             </div>
+            <div id="controls">
+                <button id="jugar">Jugar</button>
+                <button id="pista" disabled>Pista</button>
+            </div>
+            <div id="feedback">Feedback apareixerà aquí...</div>
         </div>
     </div>
 

@@ -22,6 +22,7 @@
 
         * {
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent; /* Elimina el resaltado azul al tocar en iOS */
         }
 
         body {
@@ -35,11 +36,12 @@
             color: var(--text-color);
             line-height: 1.6;
             min-height: 100vh;
+            -webkit-text-size-adjust: 100%; /* Previene el zoom automático en iOS */
         }
 
         .container {
             width: 100%;
-            max-width: 600px; /* Limitamos el ancho máximo para mantener diseño vertical */
+            max-width: 600px;
             padding: 0 15px;
             display: flex;
             flex-direction: column;
@@ -62,9 +64,9 @@
         #rosco {
             position: relative;
             width: 100%;
-            max-width: 400px; /* Reducimos el tamaño máximo del rosco */
+            max-width: 400px;
             height: 0;
-            padding-bottom: 100%; /* Mantener relación de aspecto 1:1 */
+            padding-bottom: 100%;
             margin: 0 auto;
         }
 
@@ -85,17 +87,29 @@
             justify-content: center;
             transition: var(--transition);
             font-size: 0.8rem;
+            -webkit-appearance: none; /* Elimina estilos nativos de iOS */
+            -webkit-touch-callout: none; /* Desactiva el menú al mantener presionado en iOS */
+            user-select: none; /* Evita la selección de texto */
+        }
+
+        /* Estados específicos para los botones de letras */
+        .letter-btn.correct {
+            background-color: var(--success-color) !important;
+        }
+
+        .letter-btn.incorrect {
+            background-color: var(--danger-color) !important;
+        }
+
+        .letter-btn.passed {
+            color: #ffcc00;
+            background-color: var(--primary-color) !important;
         }
 
         @media (min-width: 480px) {
             .letter-btn {
                 font-size: 0.9rem;
             }
-        }
-
-        /* Estilo para letras pasadas - color de texto amarillento */
-        .letter-btn.passed {
-            color: #ffcc00;
         }
 
         .game-controls {
@@ -142,7 +156,8 @@
             flex: 1;
             border-radius: 5px;
             border: 2px solid var(--primary-color);
-            min-width: 0; /* Para evitar problemas de desbordamiento en flex */
+            min-width: 0;
+            -webkit-appearance: none; /* Elimina estilos nativos de iOS */
         }
 
         #input-area button {
@@ -155,6 +170,7 @@
             background-color: var(--warning-color);
             color: var(--light-text);
             white-space: nowrap;
+            -webkit-appearance: none;
         }
 
         #controls {
@@ -175,6 +191,7 @@
             transition: var(--transition);
             flex: 1;
             min-width: 140px;
+            -webkit-appearance: none;
         }
 
         /* Botón Jugar en verde cuando no hay juego activo */
@@ -263,9 +280,9 @@
         let secondRound = false;
         let timerInterval;
         let totalTime = 10 * 60;
-        let gameWords = []; // Copia modificable de words con estado
-        let feedbackHistory = []; // Historial de feedback para acumular
-        let isGameActive = false; // Indica si hay un juego en curso
+        let gameWords = [];
+        let feedbackHistory = [];
+        let isGameActive = false;
 
         // Referencias a elementos del DOM
         const rosco = document.getElementById('rosco');
@@ -279,45 +296,37 @@
 
         // Función para inicializar el juego
         function initializeGame() {
-            // Crear copia de words con estado
             gameWords = words.map(word => ({
                 ...word,
-                state: 'pending', // pending, correct, incorrect, passed
+                state: 'pending',
                 attempts: 0
             }));
 
-            // Reiniciar variables de estado
             currentIndex = 0;
             secondRound = false;
             feedbackHistory = [];
             totalTime = 10 * 60;
             isGameActive = true;
 
-            // Actualizar elementos visuales
             updateFeedback();
             updateTimer();
-
-            // Actualizar estado de botones
             updateButtonsState();
 
-            // Crear el rosco visual si no existe
             if (rosco.children.length === 0) {
                 createRosco();
             } else {
-                // Si ya existe, resetear colores
                 resetRoscoColors();
             }
 
-            // Mostrar la primera definición
             showDefinition();
         }
 
         // Función para crear el rosco visual
         function createRosco() {
             const containerWidth = rosco.offsetWidth;
-            const radius = containerWidth * 0.4; // 40% del ancho del contenedor
+            const radius = containerWidth * 0.4;
             const centerX = containerWidth / 2;
-            const centerY = containerWidth / 2; // Usamos el mismo valor ya que es un cuadrado
+            const centerY = containerWidth / 2;
             const totalLetters = words.length;
             
             words.forEach((item, index) => {
@@ -334,6 +343,12 @@
                     currentIndex = index;
                     showDefinition();
                 });
+                // Añadir listener táctil específico para dispositivos móviles
+                btn.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    currentIndex = index;
+                    showDefinition();
+                }, { passive: false });
                 rosco.appendChild(btn);
             });
         }
@@ -342,8 +357,7 @@
         function resetRoscoColors() {
             gameWords.forEach(item => {
                 const btn = document.getElementById('btn-' + item.letter);
-                btn.style.backgroundColor = '#1e90ff';
-                btn.classList.remove('passed');
+                btn.className = 'letter-btn'; // Restablecer clase base
             });
         }
 
@@ -361,15 +375,13 @@
                 currentIndex = (currentIndex + 1) % gameWords.length;
                 if (currentIndex === 0) {
                     secondRound = true;
-                    pistaBtn.disabled = false; // Habilitar pista en segunda ronda
+                    pistaBtn.disabled = false;
 
-                    // Buscar la primera palabra no correcta para la segunda ronda
                     let nextIndex = 0;
                     while (nextIndex < gameWords.length && gameWords[nextIndex].state != 'passed') {
                         nextIndex++;
                     }
 
-                    // Si no hay más palabras pendientes, terminar el juego
                     if (nextIndex >= gameWords.length) {
                         endGame("completado");
                         return;
@@ -378,17 +390,14 @@
                     currentIndex = nextIndex;
                 }
             } else {
-                // En segunda ronda, avanzar al siguiente índice y buscar la siguiente palabra no correcta
                 let nextIndex = (currentIndex + 1) % gameWords.length;
                 let attempts = 0;
 
-                // Buscar la siguiente palabra que no sea correcta
                 while (attempts < gameWords.length && gameWords[nextIndex].state != 'passed') {
                     nextIndex = (nextIndex + 1) % gameWords.length;
                     attempts++;
                 }
 
-                // Si después de buscar, la palabra en nextIndex es correcta, significa que no hay más palabras pendientes
                 if (gameWords[nextIndex].state === 'correct') {
                     endGame("completado");
                     return;
@@ -411,21 +420,17 @@
             clearInterval(timerInterval);
             isGameActive = false;
 
-            // Actualizar estado de botones
             updateButtonsState();
 
-            // Mostrar estadísticas finales
             const correct = gameWords.filter(word => word.state === 'correct').length;
             const incorrect = gameWords.filter(word => word.state === 'incorrect').length;
             const passed = gameWords.filter(word => word.state === 'passed').length;
 
-            // Mensaje para el área de feedback
             let feedbackMessage = `<strong>Juego terminado. Estadísticas:</strong><br>
                               Correctas: ${correct}<br>
                               Incorrectas: ${incorrect}<br>
                               Pasadas: ${passed}`;
 
-            // Mensaje para el alert emergente
             let alertMessage = `Juego terminado.\n\n`;
 
             if (reason === "tiempo") {
@@ -437,10 +442,7 @@
 
             alertMessage += `Estadísticas:\nCorrectas: ${correct}\nIncorrectas: ${incorrect}\nPasadas: ${passed}`;
 
-            // Mostrar mensaje en el área de feedback
             addToFeedback(feedbackMessage);
-
-            // Mostrar mensaje emergente
             alert(alertMessage);
         }
 
@@ -460,21 +462,17 @@
         // Función para actualizar la visualización del feedback
         function updateFeedback() {
             feedbackBox.innerHTML = feedbackHistory.join('<br>');
-            // Hacer scroll al final para mostrar el mensaje más reciente
             feedbackBox.scrollTop = feedbackBox.scrollHeight;
         }
 
         // Función para actualizar el estado de los botones
         function updateButtonsState() {
             if (isGameActive) {
-                // Juego activo: botón Jugar en rojo con texto "Reiniciar juego"
                 jugarBtn.textContent = 'Reiniciar juego';
                 jugarBtn.classList.add('playing');
             } else {
-                // Juego inactivo: botón Jugar en verde con texto "Jugar"
                 jugarBtn.textContent = 'Jugar';
                 jugarBtn.classList.remove('playing');
-                // Deshabilitar botón Pista cuando no hay juego activo
                 pistaBtn.disabled = true;
             }
         }
@@ -482,11 +480,9 @@
         // Inicializar el juego al cargar la página
         jugarBtn.addEventListener('click', () => {
             if (isGameActive) {
-                // Si hay un juego activo, pedir confirmación para reiniciar
                 if (confirm('¿Estás seguro de que quieres reiniciar el juego? Se perderán todas las respuestas actuales.')) {
                     initializeGame();
 
-                    // Iniciar temporizador
                     clearInterval(timerInterval);
                     timerInterval = setInterval(() => {
                         totalTime--;
@@ -498,10 +494,8 @@
                     }, 1000);
                 }
             } else {
-                // No hay juego activo, iniciar uno nuevo
                 initializeGame();
 
-                // Iniciar temporizador
                 clearInterval(timerInterval);
                 timerInterval = setInterval(() => {
                     totalTime--;
@@ -524,14 +518,10 @@
         pasarBtn.addEventListener('click', () => {
             const currentWord = gameWords[currentIndex];
 
-            // Solo podemos pasar si la palabra no ha sido contestada
             if (currentWord.state === 'pending' || currentWord.state === 'passed') {
                 currentWord.state = 'passed';
-                // Cambiar solo el color de la letra, no el fondo
                 const btn = document.getElementById('btn-' + currentWord.letter);
                 btn.classList.add('passed');
-
-                // NO añadimos mensaje al feedback cuando se pasa una palabra
                 nextLetter();
             } else {
                 addToFeedback(`<span style="color:red">Esta palabra ya ha sido contestada</span>`);
@@ -544,7 +534,6 @@
                 const answer = answerInput.value.trim();
                 const currentWord = gameWords[currentIndex];
 
-                // Validar que se ha introducido una respuesta
                 if (answer === "") {
                     addToFeedback(`<span style="color:red">Si us plau, escriu una resposta abans de prémer Enter.</span>`);
                     return;
@@ -553,22 +542,18 @@
                 const btn = document.getElementById('btn-' + currentWord.letter);
                 const isCorrect = answer.toLowerCase() === currentWord.word.toLowerCase();
 
-                // Actualizar estado de la palabra
                 currentWord.state = isCorrect ? 'correct' : 'incorrect';
                 currentWord.attempts++;
 
-                // Cambiar color del botón según resultado
-                btn.style.backgroundColor = isCorrect ? 'green' : 'red';
+                // Cambiar clase CSS en lugar de estilo directo
+                btn.className = 'letter-btn'; // Resetear clase
+                btn.classList.add(isCorrect ? 'correct' : 'incorrect');
 
-                // Preparar mensaje de feedback
                 let feedbackMessage = isCorrect
                     ? `<span style="color:green">Correcte! La paraula ${currentWord.word} és correcta.</span>`
                     : `<span style="color:red">Incorrecte! La resposta correcta per a ${currentWord.letter} és: <strong>${currentWord.word}</strong></span>`;
 
-                // Añadir mensaje al historial
                 addToFeedback(feedbackMessage);
-
-                // Avanzar a la siguiente letra
                 nextLetter();
             }
         });
@@ -578,11 +563,9 @@
 
         // Redibujar el rosco cuando cambie el tamaño de la ventana
         window.addEventListener('resize', () => {
-            // Limpiar el rosco existente
             while (rosco.firstChild) {
                 rosco.removeChild(rosco.firstChild);
             }
-            // Volver a crear el rosco
             createRosco();
         });
 

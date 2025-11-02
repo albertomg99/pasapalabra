@@ -240,8 +240,7 @@
              
             </div>
             <div id="controls">
-                <button id="jugar">Jugar</button>
-                <button id="pista" disabled>Pista</button>
+                <button id="jugar">Jugar</button>               
                 <button id="pasar" class="playing">Pasa Palabra</button>
             </div>
             <div id="feedback">Feedback apareixerà aquí...</div>
@@ -292,7 +291,6 @@
         const timerBox = document.getElementById('timer');
         const answerInput = document.getElementById('answer-input');
         const jugarBtn = document.getElementById('jugar');
-        const pistaBtn = document.getElementById('pista');
         const pasarBtn = document.getElementById('pasar');
 
         // Función para inicializar el juego
@@ -376,7 +374,7 @@
                 currentIndex = (currentIndex + 1) % gameWords.length;
                 if (currentIndex === 0) {
                     secondRound = true;
-                    pistaBtn.disabled = false;
+                
 
                     let nextIndex = 0;
                     while (nextIndex < gameWords.length && gameWords[nextIndex].state != 'passed') {
@@ -474,7 +472,7 @@
             } else {
                 jugarBtn.textContent = 'Jugar';
                 jugarBtn.classList.remove('playing');
-                pistaBtn.disabled = true;
+         
             }
         }
 
@@ -509,12 +507,7 @@
             }
         });
 
-        // Botón Pista
-        pistaBtn.addEventListener('click', () => {
-            const currentWord = gameWords[currentIndex];
-            addToFeedback(`Pista: ${currentWord.definition.substring(0, 10)}...`);
-        });
-
+     
         // Botón Pasar
         pasarBtn.addEventListener('click', () => {
             const currentWord = gameWords[currentIndex];
@@ -563,12 +556,12 @@
         window.addEventListener('load', createRosco);
 
         // Redibujar el rosco cuando cambie el tamaño de la ventana
-        window.addEventListener('resize', () => {
-            while (rosco.firstChild) {
-                rosco.removeChild(rosco.firstChild);
-            }
-            createRosco();
-        });
+       // window.addEventListener('resize', () => {
+        //    while (rosco.firstChild) {
+        //        rosco.removeChild(rosco.firstChild);
+        //    }
+        //    createRosco();
+        //});
 
         // Actualizar estado inicial de los botones
         updateButtonsState();

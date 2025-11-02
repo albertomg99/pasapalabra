@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rosco de Pasapalabra - Hardware</title>
+    <style>
+        /* Variables CSS para mantener consistencia */
+        :root {
+            --primary-color: #1e90ff;
+            --secondary-color: #f0f8ff;
+            --success-color: #4CAF50;
+            --warning-color: orange;
+            --danger-color: #f44336;
+            --text-color: #333;
+            --light-text: white;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            /* Elimina el resaltado azul al tocar en iOS */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            background: var(--secondary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            -webkit-text-size-adjust: 100%;
+            /* Previene el zoom automático en iOS */
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 0 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        #timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 10px;
+            text-align: center;
+        }
+
+        #rosco {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 0;
+            padding-bottom: 100%;
+            margin: 0 auto;
+        }
+
+        .letter-btn {
+            position: absolute;
+            width: 12%;
+            height: 12%;
+            max-width: 45px;
+            max-height: 45px;
+            border-radius: 50%;
+            border: none;
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            font-size: 0.8rem;
+            -webkit-appearance: none;
+            /* Elimina estilos nativos de iOS */
+            -webkit-touch-callout: none;
+            /* Desactiva el menú al mantener presionado en iOS */
+            user-select: none;
+            /* Evita la selección de texto */
+        }
+
+        /* Estados específicos para los botones de letras */
+        .letter-btn.correct {
+            background-color: var(--success-color) !important;
+        }
+
+        .letter-btn.incorrect {
+            background-color: var(--danger-color) !important;
+        }
+
+        .letter-btn.passed {
+            color: #ffcc00;
+            background-color: var(--primary-color) !important;
+        }
+
+        @media (min-width: 480px) {
+            .letter-btn {
+                font-size: 0.9rem;
+            }
+        }
+
+        .game-controls {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        #definition,
+        #feedback {
+            width: 100%;
+            min-height: 60px;
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin: 10px 0;
+            background-color: #ffffff;
+            box-shadow: var(--box-shadow);
+        }
+
+        #feedback {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        #input-area {
+            margin: 10px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        @media (min-width: 480px) {
+            #input-area {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+        #input-area input {
+            padding: 12px;
+            font-size: 1rem;
+            flex: 1;
+            border-radius: 5px;
+            border: 2px solid var(--primary-color);
+            min-width: 0;
+            -webkit-appearance: none;
+            /* Elimina estilos nativos de iOS */
+        }
+
+        #input-area button {
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: var(--warning-color);
+            color: var(--light-text);
+            white-space: nowrap;
+            -webkit-appearance: none;
+        }
+
+        #controls {
+            margin: 10px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        #controls button {
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            flex: 1;
+            min-width: 140px;
+            -webkit-appearance: none;
+        }
+
+        /* Botón Jugar en verde cuando no hay juego activo */
+        #jugar {
+            background-color: var(--success-color);
+            color: var(--light-text);
+        }
+
+        /* Botón Jugar en rojo cuando hay juego activo */
+        #jugar.playing {
+            background-color: var(--danger-color);
+            color: var(--light-text);
+        }
+
+        /* Botón Pista deshabilitado */
+        #pista:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        /* Mejoras de accesibilidad */
+        button:focus,
+        input:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Efectos hover para botones */
+        button:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Rosco de Pasapalabra - Hardware</h1>
+        <div id="timer">Temps restant: 10:00</div>
+
+        <div id="rosco"></div>
+
+        <div class="game-controls">
+            <div id="definition">Definició apareixerà aquí...</div>
+            <div id="input-area">
+                <input type="text" id="answer-input" placeholder="Escriu la teva resposta aquí">
+
+            </div>
+            <div id="controls">
+                <button id="jugar">Jugar</button>
+                <button id="pasar" class="playing">Pasa Palabra</button>
+            </div>
+            <div id="feedback">Feedback apareixerà aquí...</div>
+        </div>
+    </div>
+
+    <script>
+        // Definición de palabras y sus estados
+        const words = [
+            { letter: 'A', word: 'Arrencada', definition: 'Procés d\'encès del ordinador (comença amb A).' },
+            { letter: 'B', word: 'BIOS', definition: 'Sistema bàsic d\'entrada/sortida, firmware essencial (conté la B).' },
+            { letter: 'C', word: 'CPU', definition: 'Unitat central de procés, el cervell de l\'ordinador (comença amb C).' },
+            { letter: 'D', word: 'Disc Dur', definition: 'Dispositiu principal d\'emmagatzematge de dades (comença amb D).' },
+            { letter: 'E', word: 'Ethernet', definition: 'Estàndard de connexió de xarxa per cable (comença amb E).' },
+            { letter: 'F', word: 'Firmware', definition: 'Programari integrart en un dispositiu hardware (comença amb F).' },
+            { letter: 'G', word: 'GPU', definition: 'Unitat de processament gràfic (comença amb G).' },
+            { letter: 'H', word: 'Hardware', definition: 'Components físics del sistema informàtic (comença amb H).' },
+            { letter: 'I', word: 'Instal·lar', definition: 'Acció de muntar o configurar un component o programari (comença amb I).' },
+            { letter: 'J', word: 'Jumper', definition: 'Petit connector elèctric per configurar hardware (comença amb J).' },
+            { letter: 'L', word: 'LAN', definition: 'Xarxa d\'àrea local (comença amb L).' },
+            { letter: 'M', word: 'Memòria RAM', definition: 'Memòria d\'accés aleatori (comença amb M).' },
+            { letter: 'N', word: 'Nau', definition: 'Carcassa o torre de l\'ordinador (comença amb N).' },
+            { letter: 'O', word: 'Overclocking', definition: 'Augmentar la velocitat del processador per sobre del límit (comença amb O).' },
+            { letter: 'P', word: 'Port', definition: 'Connexió per connectar perifèrics (comença amb P).' },
+            { letter: 'Q', word: 'Quantitat', definition: 'Nombre de components o recursos del sistema (comença amb Q).' },
+            { letter: 'R', word: 'Restablir', definition: 'Acció de tornar un sistema a la configuració original (comença amb R).' },
+            { letter: 'S', word: 'SATA', definition: 'Interfície per connectar dispositius d\'emmagatzematge (comença amb S).' },
+            { letter: 'T', word: 'Termopasta', definition: 'Pasta tèrmica per millorar la transferència de calor (comença amb T).' },
+            { letter: 'U', word: 'USB', definition: 'Bus sèrie universal per connectar perifèrics (comença amb U).' },
+            { letter: 'V', word: 'Ventilador', definition: 'Dispositiu de refrigeració per a components (comença amb V).' },
+            { letter: 'X', word: 'Xarxa', definition: 'Sistema d\'interconnexió entre dispositius (comença amb X).' },
+            { letter: 'Z', word: 'Zòcol', definition: 'Connector de la placa base per al processador (comença amb Z).' }
+        ];
+
+        // Variables de estado del juego
+        let currentIndex = 0;
+        let secondRound = false;
+        let timerInterval;
+        let totalTime = 10 * 60;
+        let gameWords = [];
+        let feedbackHistory = [];
+        let isGameActive = false;
+
+        // Referencias a elementos del DOM
+        const rosco = document.getElementById('rosco');
+        const definitionBox = document.getElementById('definition');
+        const feedbackBox = document.getElementById('feedback');
+        const timerBox = document.getElementById('timer');
+        const answerInput = document.getElementById('answer-input');
+        const jugarBtn = document.getElementById('jugar');
+        const pasarBtn = document.getElementById('pasar');
+
+        // Función para inicializar el juego
+        function initializeGame() {
+            gameWords = words.map(word => ({
+                ...word,
+                state: 'pending',
+                attempts: 0
+            }));
+
+            currentIndex = 0;
+            secondRound = false;
+            feedbackHistory = [];
+            totalTime = 10 * 60;
+            isGameActive = true;
+
+            updateFeedback();
+            updateTimer();
+            updateButtonsState();
+
+            if (rosco.children.length === 0) {
+                createRosco();
+            } else {
+                resetRoscoColors();
+            }
+
+            showDefinition();
+        }
+
+        // Función para crear el rosco visual
+        function createRosco() {
+            const containerWidth = rosco.offsetWidth;
+            const radius = containerWidth * 0.4;
+            const centerX = containerWidth / 2;
+            const centerY = containerWidth / 2;
+            const totalLetters = words.length;
+
+            words.forEach((item, index) => {
+                const angle = (index / totalLetters) * 2 * Math.PI - Math.PI / 2;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+                const btn = document.createElement('button');
+                btn.className = 'letter-btn';
+                btn.id = 'btn-' + item.letter;
+                btn.style.left = `${x}px`;
+                btn.style.top = `${y}px`;
+                btn.textContent = item.letter;
+                btn.addEventListener('click', () => {
+                    currentIndex = index;
+                    showDefinition();
+                });
+                // Añadir listener táctil específico para dispositivos móviles
+                btn.addEventListener('touchstart', function (e) {
+                    e.preventDefault();
+                    currentIndex = index;
+                    showDefinition();
+                }, { passive: false });
+                rosco.appendChild(btn);
+            });
+        }
+
+        // Función para resetear los colores del rosco
+        function resetRoscoColors() {
+            gameWords.forEach(item => {
+                const btn = document.getElementById('btn-' + item.letter);
+                btn.className = 'letter-btn'; // Restablecer clase base
+            });
+        }
+
+        // Función para mostrar la definición actual
+        function showDefinition() {
+            const currentWord = gameWords[currentIndex];
+            definitionBox.textContent = `Lletra ${currentWord.letter}: ${currentWord.definition}`;
+            answerInput.value = '';
+            answerInput.focus();
+        }
+
+        // Función para avanzar a la siguiente letra
+        function nextLetter() {
+            if (!secondRound) {
+                currentIndex = (currentIndex + 1) % gameWords.length;
+                if (currentIndex === 0) {
+                    secondRound = true;
+
+
+                    let nextIndex = 0;
+                    while (nextIndex < gameWords.length && gameWords[nextIndex].state != 'passed') {
+                        nextIndex++;
+                    }
+
+                    if (nextIndex >= gameWords.length) {
+                        endGame("completado");
+                        return;
+                    }
+
+                    currentIndex = nextIndex;
+                }
+            } else {
+                let nextIndex = (currentIndex + 1) % gameWords.length;
+                let attempts = 0;
+
+                while (attempts < gameWords.length && gameWords[nextIndex].state != 'passed') {
+                    nextIndex = (nextIndex + 1) % gameWords.length;
+                    attempts++;
+                }
+
+                if (gameWords[nextIndex].state === 'correct') {
+                    endGame("completado");
+                    return;
+                }
+
+                currentIndex = nextIndex;
+            }
+
+            showDefinition();
+        }
+
+        // Función para verificar si hay palabras pendientes
+        function hasPendingWords() {
+            return gameWords.some(word => word.state === 'pending' || word.state === 'passed');
+        }
+
+        // Función para finalizar el juego
+        function endGame(reason) {
+            definitionBox.textContent = 'Has acabat el rosco!';
+            clearInterval(timerInterval);
+            isGameActive = false;
+
+            updateButtonsState();
+
+            const correct = gameWords.filter(word => word.state === 'correct').length;
+            const incorrect = gameWords.filter(word => word.state === 'incorrect').length;
+            const passed = gameWords.filter(word => word.state === 'passed').length;
+
+            let feedbackMessage = `<strong>Juego terminado. Estadísticas:</strong><br>
+                              Correctas: ${correct}<br>
+                              Incorrectas: ${incorrect}<br>
+                              Pasadas: ${passed}`;
+
+            let alertMessage = `Juego terminado.\n\n`;
+
+            if (reason === "tiempo") {
+                alertMessage += "Se ha agotado el tiempo.\n\n";
+                feedbackMessage = `<strong>Se ha agotado el tiempo. Juego terminado.</strong><br>` + feedbackMessage;
+            } else {
+                alertMessage += "Has completado todas las palabras.\n\n";
+            }
+
+            alertMessage += `Estadísticas:\nCorrectas: ${correct}\nIncorrectas: ${incorrect}\nPasadas: ${passed}`;
+
+            addToFeedback(feedbackMessage);
+            alert(alertMessage);
+        }
+
+        // Función para actualizar el temporizador
+        function updateTimer() {
+            const minutes = Math.floor(totalTime / 60);
+            const seconds = totalTime % 60;
+            timerBox.textContent = `Temps restant: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Función para añadir mensaje al historial de feedback
+        function addToFeedback(message) {
+            feedbackHistory.push(message);
+            updateFeedback();
+        }
+
+        // Función para actualizar la visualización del feedback
+        function updateFeedback() {
+            feedbackBox.innerHTML = feedbackHistory.join('<br>');
+            feedbackBox.scrollTop = feedbackBox.scrollHeight;
+        }
+
+        // Función para actualizar el estado de los botones
+        function updateButtonsState() {
+            if (isGameActive) {
+                jugarBtn.textContent = 'Reiniciar juego';
+                jugarBtn.classList.add('playing');
+            } else {
+                jugarBtn.textContent = 'Jugar';
+                jugarBtn.classList.remove('playing');
+
+            }
+        }
+
+        // Inicializar el juego al cargar la página
+        jugarBtn.addEventListener('click', () => {
+            if (isGameActive) {
+                if (confirm('¿Estás seguro de que quieres reiniciar el juego? Se perderán todas las respuestas actuales.')) {
+                    initializeGame();
+
+                    clearInterval(timerInterval);
+                    timerInterval = setInterval(() => {
+                        totalTime--;
+                        updateTimer();
+                        if (totalTime <= 0) {
+                            clearInterval(timerInterval);
+                            endGame("tiempo");
+                        }
+                    }, 1000);
+                }
+            } else {
+                initializeGame();
+
+                clearInterval(timerInterval);
+                timerInterval = setInterval(() => {
+                    totalTime--;
+                    updateTimer();
+                    if (totalTime <= 0) {
+                        clearInterval(timerInterval);
+                        endGame("tiempo");
+                    }
+                }, 1000);
+            }
+        });
+
+
+        // Botón Pasar
+        pasarBtn.addEventListener('click', () => {
+            const currentWord = gameWords[currentIndex];
+
+            if (currentWord.state === 'pending' || currentWord.state === 'passed') {
+                currentWord.state = 'passed';
+                const btn = document.getElementById('btn-' + currentWord.letter);
+                btn.classList.add('passed');
+                nextLetter();
+            } else {
+                addToFeedback(`<span style="color:red">Esta palabra ya ha sido contestada</span>`);
+            }
+        });
+
+        // Enter al campo de texto para enviar respuesta
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const answer = answerInput.value.trim();
+                const currentWord = gameWords[currentIndex];
+
+                if (answer === "") {
+                    addToFeedback(`<span style="color:red">Si us plau, escriu una resposta abans de prémer Enter.</span>`);
+                    return;
+                }
+
+                const btn = document.getElementById('btn-' + currentWord.letter);
+                const isCorrect = answer.toLowerCase() === currentWord.word.toLowerCase();
+
+                currentWord.state = isCorrect ? 'correct' : 'incorrect';
+                currentWord.attempts++;
+
+                // Cambiar clase CSS en lugar de estilo directo
+                btn.className = 'letter-btn'; // Resetear clase
+                btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+                let feedbackMessage = isCorrect
+                    ? `<span style="color:green">Correcte! La paraula ${currentWord.word} és correcta.</span>`
+                    : `<span style="color:red">Incorrecte! La resposta correcta per a ${currentWord.letter} és: <strong>${currentWord.word}</strong></span>`;
+
+                if (!isCorrect) addToFeedback(feedbackMessage);
+                nextLetter();
+            }
+        });
+
+        // Crear el rosco al cargar la página
+        window.addEventListener('load', createRosco);
+
+        // Redibujar el rosco cuando cambie el tamaño de la ventana
+        // window.addEventListener('resize', () => {
+        //    while (rosco.firstChild) {
+        //        rosco.removeChild(rosco.firstChild);
+        //    }
+        //    createRosco();
+        //});
+
+        // Actualizar estado inicial de los botones
+        updateButtonsState();
+    </script>
+</body>
+
+</html>

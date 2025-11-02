@@ -547,7 +547,7 @@
                     ? `<span style="color:green">Correcte! La paraula ${currentWord.word} és correcta.</span>`
                     : `<span style="color:red">Incorrecte! La resposta correcta per a ${currentWord.letter} és: <strong>${currentWord.word}</strong></span>`;
 
-                addToFeedback(feedbackMessage);
+                if (isCorrect) addToFeedback(feedbackMessage);
                 nextLetter();
             }
         });

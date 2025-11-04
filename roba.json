@@ -1,6 +1,6 @@
 {
-  "title": "Rosco de Pasapalabra - Roba i Complements",
-  "h1": "Rosco de Pasapalabra - Roba i Complements",
+  "title": "Rosco de Roba i Complements",
+  "h1": "Rosco de Roba i Complements",
   "words": [
     { "letter": "A", "words": ["Anorac"], "definition": "Comença per la lletra A: Peça d'abric impermeable, sovint amb caputxa, per a climes freds." },
     { "letter": "B", "words": ["Bufanda"], "definition": "Comença per la lletra B: Peça de roba llarga i estreta que es posa al voltant del coll per abrigar." },
@@ -9,7 +9,7 @@
     { "letter": "E", "words": ["Estampat"], "definition": "Comença per la lletra E: Dibuixos o motius impresos en una peça de roba." },
     { "letter": "F", "words": ["Faldilla", "Falda"], "definition": "Comença per la lletra F: Peça de vestir femenina que penja de la cintura cap avall." },
     { "letter": "G", "words": ["Guants"], "definition": "Comença per la lletra G: Peça que cobreix la mà i els dits, un per un, per protegir-los del fred." },
-    { "letter": "H", "words": ["Havaianes", "Xancletes"], "definition": "Comença per la lletra H: Tipus de sandàlia d'estiu que se subjecta al dit gros del peu." },
+    { "letter": "H", "words": ["Havaianes"], "definition": "Comença per la lletra H: Tipus de sandàlia d'estiu que se subjecta al dit gros del peu." },
     { "letter": "I", "words": ["Impermeable"], "definition": "Comença per la lletra I: Peça de roba que no deixa passar l'aigua, ideal per la pluja." },
     { "letter": "J", "words": ["Jersei"], "definition": "Comença per la lletra J: Peça de roba de llana o punt que cobreix el tronc i els braços." },
     { "letter": "L", "words": ["Llaç"], "definition": "Comença per la lletra L: Nus decoratiu que es fa amb cintes o cordons, sovint en sabates o vestits." },
@@ -24,6 +24,6 @@
     { "letter": "U", "words": ["Ulleres"], "definition": "Comença per la lletra U: Complement format per dos vidres o lents subjectes en una muntura, per veure-hi millor o protegir-se del sol." },
     { "letter": "V", "words": ["Vestit"], "definition": "Comença per la lletra V: Peça de roba, generalment femenina, que cobreix el cos d'una sola peça des de les espatlles." },
     { "letter": "X", "words": ["Xal"], "definition": "Comença per la lletra X: Peça de roba gran, sovint de llana o seda, que es porta sobre les espatlles." },
-    { "letter": "Z", "words": ["Blazer"], "definition": "Conté la lletra Z: Tipus de jaqueta d'estil formal però més esportiu que la d'un vestit." }
+    { "letter": "Z", "words": ["Suavitzant"], "definition": "Conté la lletra Z: Substància líquida que s'afegeix a la rentadora després del detergent per deixar la roba més suau." }
   ]
 }

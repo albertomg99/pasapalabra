@@ -1,0 +1,30 @@
+{
+  "title": "Rosco de Pasapalabra - Propiedades del texto",
+  "h1": "Rosco de Pasapalabra - Propiedades del texto",
+  "words": [
+    { "letter": "A", "words": ["argumentativo"], "definition": "Comienza por la letra A: Tipo de texto cuya intención es convencer al receptor mediante razones." },
+    { "letter": "B", "words": ["biografía"], "definition": "Comienza por la letra B: Texto narrativo con intención informativa que relata la vida de una persona." },
+    { "letter": "C", "words": ["convencer"], "definition": "Comienza por la letra C: Intención comunicativa propia del texto argumentativo y el persuasivo." },
+    { "letter": "D", "words": ["descriptivo"], "definition": "Comienza por la letra D: Tipo de texto cuya intención es detallar características y cualidades." },
+    { "letter": "E", "words": ["expositivo"], "definition": "Comienza por la letra E: Tipo de texto cuya intención comunicativa es informar." },
+    { "letter": "F", "words": ["fática"], "definition": "Comienza por la letra F: Función del lenguaje que se centra en el canal de comunicación." },
+    { "letter": "G", "words": ["guiar"], "definition": "Comienza por la letra G: Intención comunicativa del texto instructivo; sinónimo de indicar o dirigir." },
+    { "letter": "H", "words": ["hechos"], "definition": "Comienza por la letra H: El texto narrativo los narra y el texto expositivo los da a conocer." },
+    { "letter": "I", "words": ["informar"], "definition": "Comienza por la letra I: Intención comunicativa propia del texto expositivo." },
+    { "letter": "J", "words": ["personaje"], "definition": "Contiene la letra J: Uno de los elementos imprescindibles de un texto narrativo." },
+    { "letter": "L", "words": ["literario"], "definition": "Comienza por la letra L: Tipo de texto cuya intención es entretener y conmover usando el lenguaje de forma estética y creativa para expresar ideas, emociones y experiencias." },
+    { "letter": "M", "words": ["mensaje"], "definition": "Comienza por la letra M: Elemento de la comunicación que el emisor comparte con el receptor codificado en un código común y a través de un canal concreto." },
+    { "letter": "N", "words": ["narrativo"], "definition": "Comienza por la letra N: Tipo de texto que relata hechos o historias con una secuencia temporal." },
+    { "letter": "O", "words": ["objetivo"], "definition": "Comienza por la letra O: Punto de vista que presenta hechos verificables de manera neutra." },
+    { "letter": "P", "words": ["poética"], "definition": "Comienza por la letra P: Función del lenguaje que se centra en llamar la atención sobre el mensaje." },
+    { "letter": "Q", "words": ["coloquial"], "definition": "Contiene la letra Q: Registro lingüístico que se utiliza con la familia y los amigos." },
+    { "letter": "R", "words": ["referencial"], "definition": "Comienza por la letra R: Función del lenguaje que se centra en transmitir información sobre la realidad." },
+    { "letter": "S", "words": ["subjetivo"], "definition": "Comienza por la letra S: Punto de vista que refleja opiniones, emociones o valoraciones personales." },
+    { "letter": "T", "words": ["entretener"], "definition": "Contiene la letra T: Intención comunicativa característica de los textos literarios." },
+    { "letter": "U", "words": ["instructivo"], "definition": "Contiene la letra U: Tipo de texto cuya intención es dar instrucciones al receptor." },
+    { "letter": "V", "words": ["apelativa", "conativa"], "definition": "Contiene la letra V: Función del lenguaje que se centra en el receptor para influir en él." },
+    { "letter": "X", "words": ["expresiva", "emotiva"], "definition": "Contiene la letra X: Función del lenguaje que se centra en el emisor y expresa sus opiniones, sentimientos y emociones." },
+    { "letter": "Y", "words": ["oyente"], "definition": "Contiene la y. Nombre que recibe el receptor de textos orales." },
+    { "letter": "Z", "words": ["enlazar"], "definition": "Contiene la letra Z: Función de los conectores en un texto, sinónimo de unir ideas." }
+  ]
+}
